@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form";
 import Input from "../partials/Input";
 import ToggleSwitch from "../partials/ToggleSwitch";
 import { useFinance } from "@/providers/FinanceProvider";
-import Select from "../partials/Select";
-import { salariosOptions, gastosOptions } from "@/utils/category";
+import { salariosOptions, gastosOptions } from "@/utils/lists";
 import {
   numberToString,
   letrasMaiusculas,
@@ -77,6 +76,19 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
     }
   }, [finance]);
 
+  function returnCategorys() {
+    if (tipo === null) {
+      return salariosOptions.concat(gastosOptions);
+    }
+    if (tipo) {
+      return salariosOptions;
+    }
+    if (tipo === false) {
+      return gastosOptions;
+    }
+    return salariosOptions.concat(gastosOptions)
+  }
+
   const submitForm = (values: IFinance) => {
     let finalDate;
     let finalCategory;
@@ -140,18 +152,11 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
             <option value="" className="dark:text-gray-600">
               Categoria
             </option>
-            {tipo ? (
-              <>
-                <option value="Salario">Salario</option>
-                <option value="Freelancer">Freelancer</option>
-              </>
-            ) : (
-              <>
-                {" "}
-                <option value="Alimentação">Alimentação</option>
-                <option value="Gasolina">Gasolina</option>
-              </>
-            )}
+            {returnCategorys()!.map((option: any) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
           {errors?.category?.message && (
             <p className="text-xs text-red-600">{errors?.category?.message}</p>

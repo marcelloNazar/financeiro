@@ -157,29 +157,31 @@ export default function Home({ params }: any) {
       </div>
       <div className="flex flex-row-reverse h-72 w-full lg:flex-col lg:h-full lg:w-96">
         {" "}
-        <FilterPanel
-          setOrdenacao={setOrdenacao}
-          setMonth={setMonth}
-          setYear={setYear}
-          setTipo={setTipo}
-          setCategory={setCategory}
-          setFinance={setFinance}
-        />
-        <div className="hidden lg:flex w-full my-2">
-          <FinanceForm formSubmit={handleSubmit} nameButton="Adicionar" />
-        </div>
-        <div className="flex flex-col w-full h-full gap-2 pb-2 lg:pb-0">
-          <FinanceSummary
-            totalEntradas={totalEntradas}
-            totalSaidas={totalSaidas}
+        <div className="flex flex-col w-[477px] lg:w-full">
+          <FilterPanel
+            setOrdenacao={setOrdenacao}
+            setMonth={setMonth}
+            setYear={setYear}
+            setTipo={setTipo}
+            setCategory={setCategory}
+            setFinance={setFinance}
           />
-          <div className="flex w-full px-2 lg:hidden">
+          <div className="flex h-full pb-2 lg:hidden px-2 bg-gray-800/40">
             <Button
               onClick={() => setAddModalIsOpen(true)}
               text="Adicionar"
               isLoading={isLoading}
             />
           </div>
+        </div>
+        <div className="hidden lg:flex w-full my-2">
+          <FinanceForm formSubmit={handleSubmit} nameButton="Adicionar" />
+        </div>
+        <div className="flex flex-col w-full h-full">
+          <FinanceSummary
+            totalEntradas={totalEntradas}
+            totalSaidas={totalSaidas}
+          />
         </div>
       </div>
       <Modal

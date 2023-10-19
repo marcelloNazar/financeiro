@@ -1,7 +1,7 @@
 "use client";
 import { BsListUl, BsGraphUpArrow, BsGraphDownArrow } from "react-icons/bs";
 import { IFinance } from "@/interfaces/Post";
-import { salariosOptions, gastosOptions, months } from "@/utils/category";
+import { salariosOptions, gastosOptions, months } from "@/utils/lists";
 import { useFinance } from "@/providers/FinanceProvider";
 
 interface FilterPanelProps {
@@ -33,12 +33,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     if (tipo === false) {
       return gastosOptions;
     }
+  
+    return salariosOptions.concat(gastosOptions)
   }
 
   return (
     <div
       onClick={() => setFinance(null)}
-      className="flex flex-col text-xs justify-start p-2 pt-3 gap-1 items-center w-[477px] lg:w-full bg-gray-800/40 shadow-md shadow-gray-900/20 rounded-tr-lg lg:rounded-tr-lg"
+      className="flex flex-col text-xs justify-start p-2 pt-3 gap-1 items-center w-full lg:w-full bg-gray-800/40 shadow-md shadow-gray-900/20 rounded-tr-lg  lg:rounded-tr-lg"
     >
       <p className="font-semibold">ORDEM / FILTRO</p>
       <div className="flex w-full gap-1 my-0.5">
@@ -67,7 +69,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           value={month}
           onChange={(e) => setMonth(e.target.value)}
         >
-          {months.map((month) => (
+          {months.map((month: any) => (
             <option key={month.value} value={month.value}>
               {month.label}
             </option>
@@ -97,16 +99,17 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           <BsGraphDownArrow />
         </button>
       </div>
-      <div className="w-full">
+      <div className="w-full hidden lg:block">
         <select className="input" onChange={(e) => setCategory(e.target.value)}>
           <option value="">Categoria</option>
-          {returnCategorys()!.map((option) => (
+          {returnCategorys()!.map((option: any) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </select>
       </div>
+      
     </div>
   );
 };
