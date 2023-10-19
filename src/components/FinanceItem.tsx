@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { IFinance } from "@/interfaces/Post";
 import { converterDataParaDDMMYY, numberToString } from "@/utils/format";
@@ -10,14 +10,10 @@ interface FinanceItemProps {
   handleDelete: (id: string) => void;
 }
 
-const FinanceItem: React.FC<FinanceItemProps> = ({
-  teste,
-  handleDelete,
-}) => {
+const FinanceItem: React.FC<FinanceItemProps> = ({ teste, handleDelete }) => {
   const { setUpdateModalIsOpen, setFinance } = useFinance();
 
   function handleUpdate(data: IFinance) {
-    console.log(data)
     setFinance(data);
     setUpdateModalIsOpen(true);
   }
@@ -49,7 +45,7 @@ const FinanceItem: React.FC<FinanceItemProps> = ({
       <div className="item-data w-24 font-bold text-xl gap-1">
         <button
           className="hover:text-indigo-600 hover:scale-110 duration-200"
-          onClick={()=>handleUpdate(teste)}
+          onClick={() => handleUpdate(teste)}
         >
           <AiFillEdit />
         </button>

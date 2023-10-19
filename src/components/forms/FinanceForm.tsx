@@ -12,6 +12,7 @@ import {
   numberToString,
   letrasMaiusculas,
   formatarDataParaString,
+  formatarData,
 } from "@/utils/format";
 import Button from "../partials/Button";
 
@@ -45,6 +46,8 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
     data.value ? data.value.toString().replace(".", ",") : ""
   );
 
+  const dataAtual = new Date();
+
   const handleSetData = (data: IFinance) => {
     setValue("title", data.title || "");
     setValue("category", data.category!);
@@ -73,8 +76,6 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
       handleRemoveData();
     }
   }, [finance]);
-
-  const dataAtual = new Date();
 
   const submitForm = (values: IFinance) => {
     let finalDate;
@@ -157,7 +158,12 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
           )}
         </div>
 
-        <Input type="date" {...register("date")} />
+        <Input
+          type="date"
+          value={date}
+          placeholder="Data"
+          {...register("date")}
+        />
 
         <Button
           onClick={handleSubmit(submitForm)}

@@ -183,21 +183,21 @@ export default function Home({ params }: any) {
         </div>
       </div>
       <Modal
-        title="MODAL"
+        title="Salvar"
         isOpen={addModalIsOpen}
         onClose={() => setAddModalIsOpen(false)}
       >
         <FinanceForm formSubmit={handleSubmit} nameButton="Adicionar" />
       </Modal>
       <Modal
-        title="MODAL"
+        title="Atualizar"
         isOpen={updateModalIsOpen}
         onClose={closeUpdateModal}
       >
         <FinanceForm
           formSubmit={handleUpdate}
           data={finance ? finance : {}}
-          nameButton="Editar"
+          nameButton="Salvar"
         />
       </Modal>
     </section>
