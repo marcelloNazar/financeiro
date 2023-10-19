@@ -139,7 +139,7 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
         <Input
           type="text"
           {...register("value")}
-          inputMode="numeric"
+          inputMode="decimal"
           placeholder="Valor"
           value={valor}
           onChange={(e) => handleValorChange(e.target.value)}
