@@ -1,113 +1,205 @@
-import Image from 'next/image'
+"use client";
+import useSWR from "swr";
+import { useSession } from "next-auth/react";
+import { IFinance } from "@/interfaces/Post";
+import { useRouter } from "next/navigation";
+import FinanceForm from "@/components/forms/FinanceForm";
+import Spinner from "@/components/partials/Spinner";
+import { useFinance } from "@/providers/FinanceProvider";
+import FilterPanel from "@/components/FilterPanel";
+import FinanceList from "@/components/FinanceList";
+import FinanceSummary from "@/components/FinaceSummary";
+import Button from "@/components/partials/Button";
+import Modal from "@/components/partials/Modal";
 
-export default function Home() {
+export default function Home({ params }: any) {
+  const {
+    finance,
+    setFinance,
+    setLoading,
+    year,
+    setYear,
+    month,
+    setMonth,
+    day,
+    setCategory,
+    setTipo,
+    setOrdenacao,
+    setIsOpen,
+    addModalIsOpen,
+    setAddModalIsOpen,
+    updateModalIsOpen,
+    setUpdateModalIsOpen,
+  } = useFinance();
+  const session = useSession();
+
+  const username = session.data?.user?.name;
+
+  const fetcher = (...args: Parameters<typeof fetch>) =>
+    fetch(...args).then((res) => res.json());
+  let apiUrl = `/api/finances?username=${username}`;
+
+  if (year && year !== "") {
+    apiUrl += `&year=${year}`;
+  }
+
+  if (month && month !== "") {
+    apiUrl += `&month=${month}`;
+  }
+
+  if (day && day !== "") {
+    apiUrl += `&day=${day}`;
+  }
+
+  const { data, mutate, error, isLoading } = useSWR(apiUrl, fetcher);
+
+  const router = useRouter();
+
+  function closeUpdateModal() {
+    setUpdateModalIsOpen(false);
+    setFinance(null);
+  }
+
+  const handleSubmit = async (data: Partial<IFinance>) => {
+    setLoading(true);
+    try {
+      await fetch("api/finances", {
+        method: "POST",
+        body: JSON.stringify({
+          title: data.title,
+          value: data.value,
+          tipo: data.tipo,
+          category: data.category,
+          date: data.date,
+          username: session.data!.user!.name,
+        }),
+      });
+      setLoading(false);
+      setAddModalIsOpen(false);
+      mutate();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUpdate = async (data: Partial<IFinance>) => {
+    setLoading(true);
+    try {
+      await fetch(`/api/finances/${finance!._id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          title: data.title,
+          value: data.value,
+          tipo: data.tipo,
+          category: data.category,
+          date: data.date,
+          username: session.data!.user!.name,
+        }),
+      });
+      setLoading(false);
+      setUpdateModalIsOpen(false);
+      mutate();
+    } catch {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    setFinance(null);
+    try {
+      await fetch(`/api/finances/${id}`, {
+        method: "DELETE",
+      });
+      mutate();
+    } catch {
+      console.log(error);
+    }
+  };
+
+  let totalEntradas = 0;
+  let totalSaidas = 0;
+
+  data?.forEach((teste: IFinance) => {
+    if (teste.tipo) {
+      totalEntradas += teste.value;
+    } else {
+      totalSaidas += teste.value;
+    }
+  });
+
+  if (session.status === "loading") {
+    return <Spinner />;
+  }
+  if (session.status === "unauthenticated") {
+    router.push("/login");
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+    <section
+      onClick={() => setIsOpen(false)}
+      className="flex flex-col-reverse lg:flex-row  w-full h-full max-w-6xl mx-auto p-2  rounded-lg "
+    >
+      <div className="flex flex-col w-full h-full bg-gray-800/40 overflow-scroll scrollbar scrollbar-thumb-gray-800/40 flex-grow rounded-b-lg lg:rounded-tl-lg lg:rounded-br-none">
+        <div className="flex text-xs uppercase">
+          <div className="item-data w-full bg-gray-800/50 lg:rounded-tl-lg">
+            Titulo
+          </div>
+          <div className="item-data dark:bg-gray-900/20 w-20">Tipo</div>
+          <div className="hidden lg:block item-data w-32 bg-gray-800/50">
+            Data
+          </div>
+          <div className="item-data hidden lg:block  w-56 dark:bg-gray-900/20">
+            Categoria
+          </div>
+          <div className="item-data bg-gray-800/50 w-64">Valor</div>
+          <div className="item-data  w-24">Editar</div>
+        </div>
+        <FinanceList data={data} handleDelete={handleDelete} />
+      </div>
+      <div className="flex flex-row-reverse h-72 w-full lg:flex-col lg:h-full lg:w-96">
+        {" "}
+        <FilterPanel
+          setOrdenacao={setOrdenacao}
+          setMonth={setMonth}
+          setYear={setYear}
+          setTipo={setTipo}
+          setCategory={setCategory}
+          setFinance={setFinance}
+        />
+        <div className="hidden lg:flex w-full my-2">
+          <FinanceForm formSubmit={handleSubmit} nameButton="Adicionar" />
+        </div>
+        <div className="flex flex-col w-full h-full gap-2 pb-2 lg:pb-0">
+          <FinanceSummary
+            totalEntradas={totalEntradas}
+            totalSaidas={totalSaidas}
+          />
+          <div className="flex w-full px-2 lg:hidden">
+            <Button
+              onClick={() => setAddModalIsOpen(true)}
+              text="Adicionar"
+              isLoading={isLoading}
             />
-          </a>
+          </div>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <Modal
+        title="MODAL"
+        isOpen={addModalIsOpen}
+        onClose={() => setAddModalIsOpen(false)}
+      >
+        <FinanceForm formSubmit={handleSubmit} nameButton="Adicionar" />
+      </Modal>
+      <Modal
+        title="MODAL"
+        isOpen={updateModalIsOpen}
+        onClose={closeUpdateModal}
+      >
+        <FinanceForm
+          formSubmit={handleUpdate}
+          data={finance ? finance : {}}
+          nameButton="Editar"
         />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      </Modal>
+    </section>
+  );
 }
