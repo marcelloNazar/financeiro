@@ -155,7 +155,7 @@ export default function Home({ params }: any) {
         </div>
         <FinanceList data={data} handleDelete={handleDelete} />
       </div>
-      <div className="flex flex-row-reverse h-72 w-full lg:flex-col lg:h-full lg:w-96">
+      <div className="flex flex-row-reverse w-full lg:flex-col lg:h-full lg:w-96">
         {" "}
         <div className="flex flex-col w-[477px] lg:w-full">
           <FilterPanel

@@ -86,7 +86,7 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
     if (tipo === false) {
       return gastosOptions;
     }
-    return salariosOptions.concat(gastosOptions)
+    return salariosOptions.concat(gastosOptions);
   }
 
   const submitForm = (values: IFinance) => {
@@ -139,6 +139,7 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
         <Input
           type="text"
           {...register("value")}
+          inputMode="numeric"
           placeholder="Valor"
           value={valor}
           onChange={(e) => handleValorChange(e.target.value)}
