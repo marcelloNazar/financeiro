@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { useSession } from "next-auth/react";
 import { IFinance } from "@/interfaces/Finance";
 import { useRouter } from "next/navigation";
-import FinanceForm from "@/components/FinanceForm/FinanceForm";
+import FinanceForm from "@/components/forms/FinanceForm";
 import Spinner from "@/components/partials/Spinner";
 import { useFinance } from "@/providers/FinanceProvider";
 import FilterPanel from "@/components/FilterPanel";
@@ -34,7 +34,6 @@ export default function Home({ params }: any) {
       redirect("/login?callbackUrl=/");
     },
   });
-  console.log(session);
 
   const username = session.data?.user?.name;
 
@@ -129,7 +128,7 @@ export default function Home({ params }: any) {
       totalSaidas += teste.value;
     }
   });
-
+  
   if (session.status === "loading") {
     return <Spinner />;
   }
