@@ -5,12 +5,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import connect from "@/utils/db";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import clientPromise from "@/utils/clientPromisse";
-
 
 export const authOptions = {
-  
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -51,11 +47,10 @@ export const authOptions = {
       },
     }),
   ],
-
   pages: {
     error: "/login",
   },
-}
+};
 
 const handler = NextAuth(authOptions);
 
