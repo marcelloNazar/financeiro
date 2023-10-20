@@ -1,27 +1,19 @@
 "use client";
 import { BsListUl, BsGraphUpArrow, BsGraphDownArrow } from "react-icons/bs";
-import { IFinance } from "@/interfaces/Post";
 import { salariosOptions, gastosOptions, months } from "@/utils/lists";
 import { useFinance } from "@/providers/FinanceProvider";
 
-interface FilterPanelProps {
-  setOrdenacao: (ordenacao: string) => void;
-  setMonth: (month: string) => void;
-  setYear: (year: string) => void;
-  setTipo: (tipo: boolean | null) => void;
-  setCategory: (category: string) => void;
-  setFinance: (finance: IFinance | null) => void;
-}
-
-const FilterPanel: React.FC<FilterPanelProps> = ({
-  setOrdenacao,
-  setMonth,
-  setYear,
-  setTipo,
-  setCategory,
-  setFinance,
-}) => {
-  const { tipo, month } = useFinance();
+const FilterPanel: React.FC = ({}) => {
+  const {
+    tipo,
+    month,
+    setOrdenacao,
+    setMonth,
+    setYear,
+    setTipo,
+    setCategory,
+    setFinance,
+  } = useFinance();
 
   function returnCategorys() {
     if (tipo === null) {
@@ -33,8 +25,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     if (tipo === false) {
       return gastosOptions;
     }
-  
-    return salariosOptions.concat(gastosOptions)
+
+    return salariosOptions.concat(gastosOptions);
   }
 
   return (
@@ -109,7 +101,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           ))}
         </select>
       </div>
-      
     </div>
   );
 };

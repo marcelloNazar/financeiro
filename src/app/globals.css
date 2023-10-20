@@ -49,14 +49,11 @@
   .input {
     @apply rounded-lg border-transparent flex-1 appearance-none focus:border border-gray-200 shadow-[0_0_4px_gray] hover:shadow-[0_0_7px_gray] w-full py-2 px-4 bg-gray-950 text-gray-400 placeholder-gray-800 text-base transition duration-200;
   }
-  .select {
-    @apply block px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w-52;
-  }
   .page-container {
-    @apply flex flex-col-reverse lg:flex-row h-full w-full justify-center items-center pb-2 gap-2;
+    @apply flex flex-col-reverse lg:flex-row  w-full h-full max-w-6xl mx-auto p-2 rounded-lg;
   }
-  .list-container {
-    @apply flex flex-col w-2/3 h-full rounded-md mr-2 bg-white/90 dark:bg-white/5 items-center justify-start p-2 px-4;
+  .table-container {
+    @apply flex flex-col w-full h-full bg-gray-800/40 overflow-scroll scrollbar scrollbar-thumb-gray-800/40 flex-grow;
   }
   .item-list {
     @apply flex w-full justify-between items-center border-b;

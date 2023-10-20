@@ -1,5 +1,5 @@
 "use client";
-import { IFinance } from "@/interfaces/Post";
+import { IFinance } from "@/interfaces/Finance";
 import React, { createContext, ReactNode, useState } from "react";
 
 interface FinanceContextType {

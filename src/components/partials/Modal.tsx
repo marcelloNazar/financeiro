@@ -1,5 +1,5 @@
+"use client"
 import { ReactNode } from "react";
-
 interface ModalProps {
   title: string;
   isOpen: boolean;

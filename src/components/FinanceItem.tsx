@@ -1,16 +1,16 @@
 "use client";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-import { IFinance } from "@/interfaces/Post";
+import { IFinance } from "@/interfaces/Finance";
 import { converterDataParaDDMMYY, numberToString } from "@/utils/format";
 import { BsGraphDownArrow, BsGraphUpArrow } from "react-icons/bs";
 import { useFinance } from "@/providers/FinanceProvider";
 
 interface FinanceItemProps {
-  teste: IFinance;
+  data: IFinance;
   handleDelete: (id: string) => void;
 }
 
-const FinanceItem: React.FC<FinanceItemProps> = ({ teste, handleDelete }) => {
+const FinanceItem: React.FC<FinanceItemProps> = ({ data, handleDelete }) => {
   const { setUpdateModalIsOpen, setFinance } = useFinance();
 
   function handleUpdate(data: IFinance) {
@@ -18,14 +18,14 @@ const FinanceItem: React.FC<FinanceItemProps> = ({ teste, handleDelete }) => {
     setUpdateModalIsOpen(true);
   }
   return (
-    <div key={teste._id} className="border-b flex border-gray-700">
-      <div className="item-data w-full font-medium whitespace-nowrap text-white bg-gray-800/40">
-        {teste.title.length > 27
-          ? teste.title.substring(0, 27) + "..."
-          : teste.title}
-      </div>
-      <div className="item-data w-20">
-        {teste.tipo ? (
+    <tr key={data._id} className="border-b flex border-gray-700">
+      <th className="item-data w-full font-medium whitespace-nowrap text-white bg-gray-800/40">
+        {data.title.length > 27
+          ? data.title.substring(0, 27) + "..."
+          : data.title}
+      </th>
+      <td className="item-data w-20">
+        {data.tipo ? (
           <div className="flex pl-1 w-full font-bold text-xl text-green-600">
             <BsGraphUpArrow />
           </div>
@@ -34,29 +34,29 @@ const FinanceItem: React.FC<FinanceItemProps> = ({ teste, handleDelete }) => {
             <BsGraphDownArrow />
           </div>
         )}
-      </div>
-      <div className="hidden w-32 lg:block item-data bg-gray-800/40">
-        {converterDataParaDDMMYY(teste.date)}
-      </div>
-      <div className="item-data hidden w-56 lg:block">{teste.category}</div>
-      <div className="item-data bg-gray-800/40 w-64">
-        R$ {numberToString(teste.value)}
-      </div>
-      <div className="item-data w-24 font-bold text-xl gap-1">
+      </td>
+      <td className="hidden w-32 lg:block item-data bg-gray-800/40">
+        {converterDataParaDDMMYY(data.date)}
+      </td>
+      <td className="item-data hidden w-56 lg:block">{data.category}</td>
+      <td className="item-data bg-gray-800/40 w-64">
+        R$ {numberToString(data.value)}
+      </td>
+      <td className="item-data w-24 text-xl gap-1">
         <button
           className="hover:text-indigo-600 hover:scale-110 duration-200"
-          onClick={() => handleUpdate(teste)}
+          onClick={() => handleUpdate(data)}
         >
           <AiFillEdit />
         </button>
         <button
           className="hover:text-red-600 hover:scale-110 duration-200"
-          onClick={() => handleDelete(teste._id)}
+          onClick={() => handleDelete(data._id)}
         >
           <AiFillDelete />
         </button>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };
 

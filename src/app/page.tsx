@@ -1,9 +1,9 @@
 "use client";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
-import { IFinance } from "@/interfaces/Post";
+import { IFinance } from "@/interfaces/Finance";
 import { useRouter } from "next/navigation";
-import FinanceForm from "@/components/forms/FinanceForm";
+import FinanceForm from "@/components/FinanceForm/FinanceForm";
 import Spinner from "@/components/partials/Spinner";
 import { useFinance } from "@/providers/FinanceProvider";
 import FilterPanel from "@/components/FilterPanel";
@@ -11,6 +11,8 @@ import FinanceList from "@/components/FinanceList";
 import FinanceSummary from "@/components/FinaceSummary";
 import Button from "@/components/partials/Button";
 import Modal from "@/components/partials/Modal";
+import TableHeader from "@/components/TableHeader";
+import { redirect } from "next/navigation";
 
 export default function Home({ params }: any) {
   const {
@@ -18,20 +20,21 @@ export default function Home({ params }: any) {
     setFinance,
     setLoading,
     year,
-    setYear,
     month,
-    setMonth,
     day,
-    setCategory,
-    setTipo,
-    setOrdenacao,
     setIsOpen,
     addModalIsOpen,
     setAddModalIsOpen,
     updateModalIsOpen,
     setUpdateModalIsOpen,
   } = useFinance();
-  const session = useSession();
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/login?callbackUrl=/");
+    },
+  });
+  console.log(session);
 
   const username = session.data?.user?.name;
 
@@ -130,42 +133,30 @@ export default function Home({ params }: any) {
   if (session.status === "loading") {
     return <Spinner />;
   }
-  if (session.status === "unauthenticated") {
-    router.push("/login");
-  }
+
   return (
-    <section
-      onClick={() => setIsOpen(false)}
-      className="flex flex-col-reverse lg:flex-row  w-full h-full max-w-6xl mx-auto p-2  rounded-lg "
-    >
-      <div className="flex flex-col w-full h-full bg-gray-800/40 overflow-scroll scrollbar scrollbar-thumb-gray-800/40 flex-grow rounded-b-lg lg:rounded-tl-lg lg:rounded-br-none">
-        <div className="flex text-xs uppercase">
-          <div className="item-data w-full bg-gray-800/50 lg:rounded-tl-lg">
-            Titulo
-          </div>
-          <div className="item-data dark:bg-gray-900/20 w-20">Tipo</div>
-          <div className="hidden lg:block item-data w-32 bg-gray-800/50">
-            Data
-          </div>
-          <div className="item-data hidden lg:block  w-56 dark:bg-gray-900/20">
-            Categoria
-          </div>
-          <div className="item-data bg-gray-800/50 w-64">Valor</div>
-          <div className="item-data  w-24">Editar</div>
-        </div>
-        <FinanceList data={data} handleDelete={handleDelete} />
-      </div>
+    <section onClick={() => setIsOpen(false)} className="page-container">
+      <table className="table-container rounded-b-lg lg:rounded-tl-lg lg:rounded-br-none">
+        <TableHeader
+          title="Titulo"
+          type="Tipo"
+          date="Data"
+          category="Categoria"
+          value="Valor"
+          edit="Editar"
+        />
+        {data?.length === 0 ? (
+          <p className="flex w-full justify-center mt-2">
+            Adicione uma finança!
+          </p>
+        ) : (
+          <FinanceList data={data} handleDelete={handleDelete} />
+        )}
+      </table>
       <div className="flex flex-row-reverse w-full lg:flex-col lg:h-full lg:w-96">
         {" "}
-        <div className="flex flex-col w-[477px] lg:w-full">
-          <FilterPanel
-            setOrdenacao={setOrdenacao}
-            setMonth={setMonth}
-            setYear={setYear}
-            setTipo={setTipo}
-            setCategory={setCategory}
-            setFinance={setFinance}
-          />
+        <div className="flex flex-col w-[480px] lg:w-full">
+          <FilterPanel />
           <div className="flex h-full pb-2 lg:hidden px-2 bg-gray-800/40">
             <Button
               onClick={() => setAddModalIsOpen(true)}

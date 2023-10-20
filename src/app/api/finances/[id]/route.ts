@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/utils/db";
 import Finance from "@/models/Finance";
-import { IFinance } from "@/interfaces/Post";
+import { IFinance } from "@/interfaces/Finance";
 
 export const GET = async (
   request: NextRequest,

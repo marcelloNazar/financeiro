@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import { BsGraphDownArrow, BsGraphUpArrow } from "react-icons/bs";
 import { UseFormRegister } from "react-hook-form";

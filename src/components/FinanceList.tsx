@@ -1,23 +1,17 @@
 "use client";
 import { useFinance } from "@/providers/FinanceProvider";
 import FinanceItem from "./FinanceItem";
-import { IFinance } from "@/interfaces/Post";
+import { IFinance } from "@/interfaces/Finance";
 
 interface FinanceListProps {
   data: IFinance[] | null;
-  
   handleDelete: (id: string) => void;
 }
 
-const FinanceList: React.FC<FinanceListProps> = ({
-  data,
- 
-  handleDelete,
-}) => {
-
+const FinanceList: React.FC<FinanceListProps> = ({ data, handleDelete }) => {
   const { category, tipo, ordenacao } = useFinance();
   return (
-    <div className="flex flex-col">
+    <tbody className="flex flex-col">
       {data
         ?.filter((finance: IFinance) =>
           finance.category.toLowerCase().includes(category.toLowerCase())
@@ -32,14 +26,14 @@ const FinanceList: React.FC<FinanceListProps> = ({
             return a.date.localeCompare(b.date);
           }
         })
-        .map((teste) => (
+        .map((finance) => (
           <FinanceItem
-            key={teste._id}
-            teste={teste}
+            key={finance._id}
+            data={finance}
             handleDelete={handleDelete}
           />
         ))}
-    </div>
+    </tbody>
   );
 };
 
