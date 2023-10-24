@@ -41,15 +41,15 @@ const FinanceItem: React.FC<FinanceItemProps> = ({ data, handleDelete }) => {
       <td className="item-data bg-gray-800/40 w-64">
         R$ {numberToString(data.value)}
       </td>
-      <td className="item-data w-24 text-xl gap-0.5">
+      <td className="item-data w-24 text-xl">
         <button
-          className="hover:text-indigo-600 w-full hover:scale-110 duration-200"
+          className="hover:text-indigo-600 mr-[2px] w-full hover:scale-110 duration-200"
           onClick={() => handleUpdate(data)}
         >
           <AiFillEdit />
         </button>
         <button
-          className="hover:text-red-600 w-full hover:scale-110 duration-200"
+          className="hover:text-red-600 w-full mr-[1px] hover:scale-110 duration-200"
           onClick={() => handleDelete(data._id)}
         >
           <AiFillDelete />

@@ -31,7 +31,7 @@ const FilterPanel: React.FC = ({}) => {
   return (
     <div
       onClick={() => setFinance(null)}
-      className="flex flex-col text-xs justify-start p-2 pt-3 gap-1 items-center w-full lg:w-full bg-gray-800/40 shadow-md shadow-gray-900/20 rounded-tr-lg  lg:rounded-tr-lg"
+      className="flex flex-col text-xs justify-start p-2 pt-3 gap-1 items-center w-full lg:w-full bg-gray-800/40 rounded-tr-lg  lg:rounded-tr-lg"
     >
       <p className="font-semibold">ORDEM / FILTRO</p>
       <div className="flex w-full gap-1 my-0.5">

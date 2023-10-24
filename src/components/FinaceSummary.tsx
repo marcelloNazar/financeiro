@@ -11,7 +11,7 @@ const FinanceSummary: React.FC<FinanceSummaryProps> = ({
 }) => {
   return (
     <div className="flex flex-col h-full w-full lg:h-full">
-      <div className="total-card bg-gray-800/40 shadow-md shadow-gray-900/20 rounded-tl-lg lg:rounded-none">
+      <div className="total-card bg-gray-800/40 rounded-tl-lg lg:rounded-none">
         <p className="text-title">RECEITAS:</p>
         <h1 className="ml-4">R$ {numberToString(totalEntradas)}</h1>
       </div>
@@ -21,7 +21,7 @@ const FinanceSummary: React.FC<FinanceSummaryProps> = ({
         <h1 className="ml-4">R$ {numberToString(totalSaidas)}</h1>
       </div>
 
-      <div className="total-card bg-gray-800/40 shadow-md shadow-gray-900/20 lg:rounded-br-lg">
+      <div className="total-card bg-gray-800/40 lg:rounded-br-lg">
         <p className="text-title">SALDO:</p>
         <h1 className="ml-4">
           R$ {numberToString(totalEntradas - totalSaidas)}

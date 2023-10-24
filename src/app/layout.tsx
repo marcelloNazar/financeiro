@@ -4,7 +4,6 @@ import "./globals.css";
 import { Providers } from "@/providers/Providers";
 import Header from "@/components/partials/Header";
 
-
 export const metadata: Metadata = {
   title: "Controle Financeiro",
   description: "By Marcello Nazar",
