@@ -2,7 +2,6 @@
 import { useFinance } from "@/providers/FinanceProvider";
 import FinanceItem from "./FinanceItem";
 import { IFinance } from "@/interfaces/Finance";
-
 interface FinanceListProps {
   data: IFinance[] | null;
   handleDelete: (id: string) => void;

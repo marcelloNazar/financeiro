@@ -1,134 +1,32 @@
 "use client";
-import useSWR from "swr";
-import { useSession } from "next-auth/react";
-import { IFinance } from "@/interfaces/Finance";
-import { useRouter } from "next/navigation";
 import FinanceForm from "@/components/forms/FinanceForm";
 import Spinner from "@/components/partials/Spinner";
-import { useFinance } from "@/providers/FinanceProvider";
 import FilterPanel from "@/components/FilterPanel";
 import FinanceList from "@/components/FinanceList";
 import FinanceSummary from "@/components/FinaceSummary";
 import Button from "@/components/partials/Button";
 import Modal from "@/components/partials/Modal";
 import TableHeader from "@/components/TableHeader";
-import { redirect } from "next/navigation";
+import { useHomePage } from "@/components/hooks/useHomePage";
 
-export default function Home({ params }: any) {
+export default function Home() {
   const {
+    session,
     finance,
-    setFinance,
-    setLoading,
-    year,
-    month,
-    day,
+    data,
+    handleSubmit,
+    handleUpdate,
+    handleDelete,
+    totalEntradas,
+    totalSaidas,
     setIsOpen,
     addModalIsOpen,
     setAddModalIsOpen,
     updateModalIsOpen,
-    setUpdateModalIsOpen,
-  } = useFinance();
-  const session = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/login?callbackUrl=/");
-    },
-  });
+    closeUpdateModal,
+    isLoading,
+  } = useHomePage();
 
-  const username = session.data?.user?.name;
-
-  const fetcher = (...args: Parameters<typeof fetch>) =>
-    fetch(...args).then((res) => res.json());
-  let apiUrl = `/api/finances?username=${username}`;
-
-  if (year && year !== "") {
-    apiUrl += `&year=${year}`;
-  }
-
-  if (month && month !== "") {
-    apiUrl += `&month=${month}`;
-  }
-
-  if (day && day !== "") {
-    apiUrl += `&day=${day}`;
-  }
-
-  const { data, mutate, error, isLoading } = useSWR(apiUrl, fetcher);
-
-  const router = useRouter();
-
-  function closeUpdateModal() {
-    setUpdateModalIsOpen(false);
-    setFinance(null);
-  }
-
-  const handleSubmit = async (data: Partial<IFinance>) => {
-    setLoading(true);
-    try {
-      await fetch("api/finances", {
-        method: "POST",
-        body: JSON.stringify({
-          title: data.title,
-          value: data.value,
-          tipo: data.tipo,
-          category: data.category,
-          date: data.date,
-          username: session.data!.user!.name,
-        }),
-      });
-      setLoading(false);
-      setAddModalIsOpen(false);
-      mutate();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleUpdate = async (data: Partial<IFinance>) => {
-    setLoading(true);
-    try {
-      await fetch(`/api/finances/${finance!._id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          title: data.title,
-          value: data.value,
-          tipo: data.tipo,
-          category: data.category,
-          date: data.date,
-          username: session.data!.user!.name,
-        }),
-      });
-      setLoading(false);
-      setUpdateModalIsOpen(false);
-      mutate();
-    } catch {
-      console.log(error);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    setFinance(null);
-    try {
-      await fetch(`/api/finances/${id}`, {
-        method: "DELETE",
-      });
-      mutate();
-    } catch {
-      console.log(error);
-    }
-  };
-
-  let totalEntradas = 0;
-  let totalSaidas = 0;
-
-  data?.forEach((teste: IFinance) => {
-    if (teste.tipo) {
-      totalEntradas += teste.value;
-    } else {
-      totalSaidas += teste.value;
-    }
-  });
-  
   if (session.status === "loading") {
     return <Spinner />;
   }

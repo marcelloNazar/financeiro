@@ -7,7 +7,6 @@ import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
 const handler = NextAuth({
-  // Configure one or more authentication providers
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,

@@ -1,5 +1,4 @@
 import { UseFormRegister } from "react-hook-form";
-import { SelectHTMLAttributes } from "react";
 
 interface SelectProps {
   register: UseFormRegister<any>;

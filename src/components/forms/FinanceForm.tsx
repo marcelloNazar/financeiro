@@ -1,17 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
 import { IFinance } from "@/interfaces/Finance";
-import { FinanceResolver } from "@/utils/validators";
-import { useForm } from "react-hook-form";
 import Input from "../partials/Input";
 import ToggleSwitch from "../partials/ToggleSwitch";
-import { useFinance } from "@/providers/FinanceProvider";
-import { salariosOptions, gastosOptions } from "@/utils/lists";
-import {
-  numberToString,
-  letrasMaiusculas,
-  formatarDataParaString,
-} from "@/utils/format";
 import Button from "../partials/Button";
 import { useFinanceForm } from "./useFinanceForm";
 
@@ -20,6 +10,7 @@ type FinanceFormProps = {
   formSubmit: (data: Partial<IFinance>) => void;
   nameButton: string;
 };
+
 const FinanceForm: React.FC<FinanceFormProps> = ({
   data = {},
   formSubmit,
@@ -65,7 +56,7 @@ const FinanceForm: React.FC<FinanceFormProps> = ({
 
         <div className="w-full">
           <select className="input" {...register("category")} value={category}>
-            <option value="" className="dark:text-gray-600">
+            <option value="-" className="dark:text-gray-600">
               Categoria
             </option>
             {returnCategorys()!.map((option: any) => (

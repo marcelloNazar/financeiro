@@ -1,5 +1,5 @@
 "use client";
-import { numberToString } from "@/utils/format";
+import { numberToString } from "@/utils/functions";
 interface FinanceSummaryProps {
   totalEntradas: number;
   totalSaidas: number;

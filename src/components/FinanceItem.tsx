@@ -1,10 +1,9 @@
 "use client";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { IFinance } from "@/interfaces/Finance";
-import { converterDataParaDDMMYY, numberToString } from "@/utils/format";
+import { converterDataParaDDMMYY, numberToString } from "@/utils/functions";
 import { BsGraphDownArrow, BsGraphUpArrow } from "react-icons/bs";
 import { useFinance } from "@/providers/FinanceProvider";
-
 interface FinanceItemProps {
   data: IFinance;
   handleDelete: (id: string) => void;
@@ -24,13 +23,13 @@ const FinanceItem: React.FC<FinanceItemProps> = ({ data, handleDelete }) => {
           ? data.title.substring(0, 27) + "..."
           : data.title}
       </th>
-      <td className="item-data w-20">
+      <td className="item-data w-24">
         {data.tipo ? (
-          <div className="flex pl-1 w-full font-bold text-xl text-green-600">
+          <div className="flex w-full font-bold text-xl text-green-600">
             <BsGraphUpArrow />
           </div>
         ) : (
-          <div className="flex pl-1 w-full font-bold text-xl text-red-600">
+          <div className="flex w-full font-bold text-xl text-red-600">
             <BsGraphDownArrow />
           </div>
         )}
@@ -42,15 +41,15 @@ const FinanceItem: React.FC<FinanceItemProps> = ({ data, handleDelete }) => {
       <td className="item-data bg-gray-800/40 w-64">
         R$ {numberToString(data.value)}
       </td>
-      <td className="item-data w-24 text-xl gap-1">
+      <td className="item-data w-24 text-xl gap-0.5">
         <button
-          className="hover:text-indigo-600 hover:scale-110 duration-200"
+          className="hover:text-indigo-600 w-full hover:scale-110 duration-200"
           onClick={() => handleUpdate(data)}
         >
           <AiFillEdit />
         </button>
         <button
-          className="hover:text-red-600 hover:scale-110 duration-200"
+          className="hover:text-red-600 w-full hover:scale-110 duration-200"
           onClick={() => handleDelete(data._id)}
         >
           <AiFillDelete />

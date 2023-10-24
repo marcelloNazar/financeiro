@@ -25,7 +25,6 @@ const FilterPanel: React.FC = ({}) => {
     if (tipo === false) {
       return gastosOptions;
     }
-
     return salariosOptions.concat(gastosOptions);
   }
 
