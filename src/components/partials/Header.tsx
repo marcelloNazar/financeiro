@@ -11,8 +11,8 @@ export default function Header() {
   const links = [
     {
       id: 1,
-      title: "",
-      url: "/",
+      title: "teste",
+      url: "/teste",
     },
   ];
   const session = useSession();
