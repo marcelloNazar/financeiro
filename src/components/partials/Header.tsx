@@ -11,8 +11,8 @@ export default function Header() {
   const links = [
     {
       id: 1,
-      title: "teste",
-      url: "/teste",
+      title: "Home",
+      url: "/",
     },
   ];
   const session = useSession();
@@ -39,10 +39,10 @@ export default function Header() {
                 className="rounded-full"
                 src={imageUrl!}
                 alt="Descrição da imagem"
-                width={36} 
-                height={36} 
+                width={36}
+                height={36}
               />
-              {!isOpen ? <AiOutlineCaretDown /> : <AiOutlineCaretUp  />}
+              {!isOpen ? <AiOutlineCaretDown /> : <AiOutlineCaretUp />}
             </button>
             {isOpen && (
               <div className="flex absolute justify-end mr-20 mt-12">
@@ -53,8 +53,8 @@ export default function Header() {
                         className="rounded-full"
                         src={imageUrl!}
                         alt="Descrição da imagem"
-                        width={70} 
-                        height={70} 
+                        width={70}
+                        height={70}
                       />
                     </div>
                     <div className="flex justify-center">Olá, {firstName}!</div>
